@@ -1,24 +1,25 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import session from "express-session";
-import sequelize from "./config/database"
+import sequelize from "./config/database";
+import authRoutes from "./routes/auth";
+import User from "./models/user";
+import Shipment from "./models/shipment";
 
 const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "secret123",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
+});
+
+app.use("/auth", authRoutes);
+
+app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+  console.error(err);
+  res.status(500).json({ message: "Internal server error" });
 });
 
 sequelize
@@ -27,7 +28,7 @@ sequelize
   .catch((err) => console.log("DB error:", err));
 
 sequelize
-  .sync({ alter: true })
+  .sync({ force: true })
   .then(() => console.log("Tables synced"))
   .catch((err) => console.log("DB sync error:", err));
 
