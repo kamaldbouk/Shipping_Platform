@@ -26,4 +26,9 @@ sequelize
   .then(() => console.log("Database connected"))
   .catch((err) => console.log("DB error:", err));
 
+sequelize
+  .sync({ alter: true })
+  .then(() => console.log("Tables synced"))
+  .catch((err) => console.log("DB sync error:", err));
+
 export default app;
