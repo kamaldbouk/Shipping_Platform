@@ -3,8 +3,6 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import sequelize from "./config/database";
 import authRoutes from "./routes/auth";
-import User from "./models/user";
-import Shipment from "./models/shipment";
 
 const app = express();
 
