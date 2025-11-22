@@ -3,6 +3,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import sequelize from "./config/database";
 import authRoutes from "./routes/auth";
+import shipmentRoutes from "./routes/shipments";
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/auth", authRoutes);
+app.use("/shipments", shipmentRoutes);
 
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   console.error(err);
