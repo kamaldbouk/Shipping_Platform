@@ -1,4 +1,5 @@
 import Shipment from "../models/shipment";
+import { getWeatherByAddress } from "../utils/weatherService";
 
 const generateWaybill = () => {
   return `WB-${Date.now()}-${Math.random().toString(36).substring(7).toUpperCase()}`;
@@ -12,6 +13,8 @@ export const createShipment = async (req: any, res: any) => {
       return res.status(400).json({ message: "All fields required" });
     }
 
+    const weatherData = await getWeatherByAddress(customerAddress);
+
     const waybill = generateWaybill();
     const shipment = await Shipment.create({
       waybill,
@@ -20,6 +23,7 @@ export const createShipment = async (req: any, res: any) => {
       customerAddress,
       userId: req.userId,
       status: "CREATED",
+      destinationWeather: weatherData,
     });
 
     res.status(201).json({
@@ -102,7 +106,11 @@ export const updateShipment = async (req: any, res: any) => {
 
     if (customerName) shipment.customerName = customerName;
     if (customerPhone) shipment.customerPhone = customerPhone;
-    if (customerAddress) shipment.customerAddress = customerAddress;
+    if (customerAddress) {
+      shipment.customerAddress = customerAddress;
+      const weatherData = await getWeatherByAddress(customerAddress);
+      shipment.destinationWeather = weatherData;
+    }
     if (status) shipment.status = status;
 
     await shipment.save();

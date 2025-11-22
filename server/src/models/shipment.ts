@@ -10,6 +10,7 @@ class Shipment extends Model {
   public customerAddress!: string;
   public status!: string; 
   public userId!: number;
+  public destinationWeather?: any;
 }
 
 Shipment.init(
@@ -44,6 +45,10 @@ Shipment.init(
     userId: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
+    },
+    destinationWeather: {
+      type: DataTypes.JSON,
+      allowNull: true,
     },
   },
   {
