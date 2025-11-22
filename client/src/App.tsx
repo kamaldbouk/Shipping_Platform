@@ -1,17 +1,32 @@
-import { useEffect } from 'react';
-import { testAPIs } from './api/test';
-import './App.css';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import ShipmentsPage from "./pages/ShipmentsPage";
 
 function App() {
-  useEffect(() => {
-    testAPIs();
-  }, []);
+  const token = localStorage.getItem("token");
 
   return (
-    <div className="App">
-      <h1>Shipping Application</h1>
-      <p>Check the browser console for API test results</p>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/login"
+          element={token ? <Navigate to="/shipments" /> : <LoginPage />}
+        />
+        <Route
+          path="/register"
+          element={token ? <Navigate to="/shipments" /> : <RegisterPage />}
+        />
+        <Route
+          path="/shipments"
+          element={token ? <ShipmentsPage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/"
+          element={token ? <Navigate to="/shipments" /> : <Navigate to="/login" />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
