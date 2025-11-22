@@ -21,3 +21,15 @@ Basic error handling for now using try/catch blocks. Console logs are used throu
 Using dotenv to load from .env file for key safety once pushed on GitHub.
 
 ## Frontend Decisions
+
+### Components
+Created reusable components: Button (with primary/secondary variants), Input (with optional custom styling), Card (for content containers), Modal (for forms and dialogs), Navbar (with dropdown logout menu), and Loading (full-page spinner overlay).
+
+### Pages
+Each page uses React hooks (useState, useEffect) for state management. No external state management library needed for the such project. Authentication tokens and user names are stored in localStorage for simplicity and persistance.
+
+### Search & Filter
+The useEffect dependency array includes search and filterStatus that make up the functionality of the search and filter feature.
+
+### API Integration
+All API calls go through shipmentAPI wrapper functions (getShipments, createShipment, updateShipment, deleteShipment). Errors are caught and displayed to users with user-freindly messages. The application makes authenticated requests using JWT tokens.
